@@ -1,0 +1,10 @@
+// VARIABLES
+
+$minPixelsSpace: 20px;
+
+// MIXINS
+
+@mixin flexBetween {
+	display: flex;
+	justify-content: space-between;
+}

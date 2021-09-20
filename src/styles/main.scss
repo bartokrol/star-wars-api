@@ -1,3 +1,26 @@
+@import "variables";
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
 .starWarsApi {
+	padding: $minPixelsSpace 100px;
 	background-color: burlywood;
+	&__heading {
+		margin-bottom: $minPixelsSpace;
+	}
+	&__inputsAndBtnsSection {
+		@include flexBetween;
+		&__filteringSection {
+			width: 40vw;
+			@include flexBetween;
+		}
+		&__buttonsSection {
+			width: 20vw;
+			@include flexBetween;
+		}
+	}
 }
