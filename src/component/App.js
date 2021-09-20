@@ -1,5 +1,6 @@
-import FilteringSection from "./layouts/FilteringSection";
-import ButtonsSection from "./layouts/ButtonsSection";
+import FilteringSection from "../layouts/FilteringSection";
+import ButtonsSection from "../layouts/ButtonsSection";
+import "../styles/main.css";
 
 const basicClassName = "starWarsApi";
 
