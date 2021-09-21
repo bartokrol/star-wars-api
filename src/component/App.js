@@ -7,19 +7,18 @@ import "../styles/main.css";
 function App() {
 	const basicClassName = "starWarsApi";
 
-	const api = `https://swapi.dev/api/people`;
-	const [characters, setCharactes] = useState([]);
+	const api = `https://swapi.dev/api/people/`;
+	const [characters, setCharacters] = useState([]);
 
 	useEffect(() => {
 		const fetchApi = () => {
 			fetch(api)
 				.then((data) => data.json())
-				.then((data) => setCharactes([...data.results]))
+				.then((data) => setCharacters([...data.results]))
 				.catch((error) => console.log(error));
 		};
-
 		fetchApi();
-	}, []);
+	}, [api]);
 	return (
 		<div className={basicClassName}>
 			<h1 className={`${basicClassName}__heading`}>Characters</h1>
@@ -31,7 +30,7 @@ function App() {
 					basicClassName={`${basicClassName}__inputsAndBtnsSection`}
 				/>
 			</div>
-			<CharactersTable />
+			<CharactersTable characters={characters} />
 		</div>
 	);
 }
