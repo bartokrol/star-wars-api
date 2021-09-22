@@ -17,7 +17,7 @@ function App() {
 			}, 2000);
 		};
 
-		const fetchArray = (array) => {
+		const fetchArray = (array, arrName) => {
 			for (let elem of array) {
 				fetch(elem).then((response) =>
 					response.json().then((data) => {
@@ -26,6 +26,11 @@ function App() {
 					})
 				);
 			}
+			if (arrName === "species") {
+				if (!array.length) {
+					array.push("Unspecified");
+				}
+			}
 		};
 
 		async function fetchOtherData(characters) {
@@ -33,6 +38,7 @@ function App() {
 				const homeworld = character.homeworld;
 				const vehicles = character.vehicles;
 				const starships = character.starships;
+				const species = character.species;
 
 				fetch(homeworld).then((response) =>
 					response.json().then((data) =>
@@ -51,6 +57,7 @@ function App() {
 
 				fetchArray(vehicles);
 				fetchArray(starships);
+				fetchArray(species, "species");
 			});
 			await setCharacters(characters);
 			await fetchedTimeout();
@@ -63,7 +70,6 @@ function App() {
 					.then((data) => {
 						allCharacters.push(...data.results);
 						fetchAllCharacters(allCharacters, data);
-						console.log(allCharacters);
 					});
 			}
 			if (!data.next) {
@@ -86,16 +92,21 @@ function App() {
 
 	return (
 		<div className={basicClassName}>
-			<h1 className={`${basicClassName}__heading`}>Characters</h1>
-			<div className={`${basicClassName}__inputsAndBtnsSection`}>
-				<FilteringSection
-					basicClassName={`${basicClassName}__inputsAndBtnsSection`}
-				/>
-				<ButtonsSection
-					basicClassName={`${basicClassName}__inputsAndBtnsSection`}
-				/>
-			</div>
-			{fetched ? <CharactersTable characters={characters} /> : null}
+			{fetched ? (
+				<>
+					<h1 className={`${basicClassName}__heading`}>Characters</h1>
+					<div className={`${basicClassName}__inputsAndBtnsSection`}>
+						<FilteringSection
+							basicClassName={`${basicClassName}__inputsAndBtnsSection`}
+							characters={characters}
+						/>
+						<ButtonsSection
+							basicClassName={`${basicClassName}__inputsAndBtnsSection`}
+						/>
+					</div>
+					<CharactersTable characters={characters} />
+				</>
+			) : null}
 		</div>
 	);
 }

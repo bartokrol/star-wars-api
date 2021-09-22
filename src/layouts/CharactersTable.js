@@ -5,7 +5,12 @@ function CharactersTable({ characters }) {
 	// console.log(characters);
 	const dataCharacters = characters.map((character) => ({
 		checkboxCol: <input type="checkbox"></input>,
-		nameCol: character.name,
+		nameCol: (
+			<span>
+				{character.name}
+				<span>{character.species}</span>
+			</span>
+		),
 		bornCol: character.birth_year,
 		homeworldCol: character.homeworld,
 		vehiclesAndStarshipsCol: [

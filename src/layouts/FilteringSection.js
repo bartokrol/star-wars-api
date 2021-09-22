@@ -1,5 +1,9 @@
-const FilteringSection = ({ basicClassName }) => {
+const FilteringSection = ({ basicClassName, characters }) => {
+	console.log(characters);
 	const filteringSectionClass = `${basicClassName}__filteringSection`;
+	// const speciesOptions = characters.map((character) =>
+	// 	console.log(character.species)
+	// );
 	return (
 		<div className={filteringSectionClass}>
 			<input
