@@ -14,7 +14,7 @@ function App() {
 		const fetchedTimeout = () => {
 			setTimeout(() => {
 				setFetched(true);
-			}, 1000);
+			}, 2000);
 		};
 
 		const fetchArray = (array) => {
@@ -53,17 +53,34 @@ function App() {
 				fetchArray(starships);
 			});
 			await setCharacters(characters);
-			fetchedTimeout();
+			await fetchedTimeout();
 		}
 
-		const fetchApi = () => {
-			fetch(api)
-				.then((data) => data.json())
+		const fetchAllCharacters = (allCharacters, data) => {
+			if (data.next) {
+				fetch(data.next)
+					.then((response) => response.json())
+					.then((data) => {
+						allCharacters.push(...data.results);
+						fetchAllCharacters(allCharacters, data);
+						console.log(allCharacters);
+					});
+			}
+			if (!data.next) {
+				fetchOtherData(allCharacters);
+			}
+		};
+
+		async function fetchApi() {
+			const allCharacters = [];
+			await fetch(api)
+				.then((response) => response.json())
 				.then((data) => {
-					fetchOtherData([...data.results]);
+					allCharacters.push(...data.results);
+					fetchAllCharacters(allCharacters, data);
 				})
 				.catch((error) => console.log(error));
-		};
+		}
 		fetchApi();
 	}, []);
 
