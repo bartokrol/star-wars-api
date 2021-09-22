@@ -1,11 +1,8 @@
-// const CharactersTable = ({ characters }) => {
-// 	return <div>Characters Table</div>;
-// };
-
 import { useTable } from "react-table";
 import React from "react";
 
 function CharactersTable({ characters }) {
+	// console.log(characters);
 	const dataCharacters = characters.map((character) => ({
 		checkboxCol: <input type="checkbox"></input>,
 		nameCol: character.name,
@@ -96,11 +93,9 @@ function CharactersTable({ characters }) {
 					</tr>
 				))}
 			</thead>
-
 			<tbody {...getTableBodyProps()}>
 				{rows.map((row) => {
 					prepareRow(row);
-
 					return (
 						<tr {...row.getRowProps()}>
 							{row.cells.map((cell) => {
