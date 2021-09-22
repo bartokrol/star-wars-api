@@ -17,9 +17,23 @@ function App() {
 			}, 1000);
 		};
 
-		const fetchOtherData = (characters) => {
-			characters.forEach((character) => {
+		const fetchArray = (array) => {
+			for (let elem of array) {
+				fetch(elem).then((response) =>
+					response.json().then((data) => {
+						array.shift();
+						array.push(data.name);
+					})
+				);
+			}
+		};
+
+		async function fetchOtherData(characters) {
+			await characters.forEach((character) => {
 				const homeworld = character.homeworld;
+				const vehicles = character.vehicles;
+				const starships = character.starships;
+
 				fetch(homeworld).then((response) =>
 					response.json().then((data) =>
 						setCharacters((prevData) =>
@@ -34,10 +48,13 @@ function App() {
 						)
 					)
 				);
+
+				fetchArray(vehicles);
+				fetchArray(starships);
 			});
-			setCharacters(characters);
+			await setCharacters(characters);
 			fetchedTimeout();
-		};
+		}
 
 		const fetchApi = () => {
 			fetch(api)
