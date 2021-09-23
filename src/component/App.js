@@ -11,82 +11,67 @@ function App() {
 	const [fetched, setFetched] = useState(false);
 
 	useEffect(() => {
-		const fetchedTimeout = () => {
-			setTimeout(() => {
-				setFetched(true);
-			}, 2000);
-		};
-
-		const fetchArray = (array, arrName) => {
-			for (let elem of array) {
-				fetch(elem).then((response) =>
-					response.json().then((data) => {
-						array.shift();
-						array.push(data.name);
-					})
-				);
-			}
-			if (arrName === "species") {
-				if (!array.length) {
-					array.push("Unspecified");
-				}
-			}
-		};
-
-		async function fetchOtherData(characters) {
-			await characters.forEach((character) => {
+		const fetchOtherData = (characters) => {
+			const charactersWithAllData = [];
+			characters.forEach((character) => {
 				const homeworld = character.homeworld;
+				const species = character.species;
 				const vehicles = character.vehicles;
 				const starships = character.starships;
-				const species = character.species;
+				let urls = [homeworld, ...species, ...vehicles, ...starships];
 
-				fetch(homeworld).then((response) =>
-					response.json().then((data) =>
-						setCharacters((prevData) =>
-							prevData.map((prevCharacter) =>
-								prevCharacter.homeworld === homeworld
-									? {
-											...prevCharacter,
-											homeworld: data.name,
-									  }
-									: prevCharacter
-							)
-						)
-					)
-				);
-
-				fetchArray(vehicles);
-				fetchArray(starships);
-				fetchArray(species, "species");
+				Promise.all(
+					urls.map((url) => {
+						if (url.length) {
+							fetch(url)
+								.then((response) => response.json())
+								.then((data) => {
+									if (url.search("species") > 0) {
+										character.species = data.name;
+									}
+									if (url.search("planets") > 0) {
+										character.homeworld = data.name;
+									}
+									if (url.search("vehicles") > 0) {
+										character.vehicles.shift();
+										character.vehicles.push(data.name);
+									}
+									if (url.search("starships") > 0) {
+										character.starships.shift();
+										character.starships.push(data.name);
+									}
+								})
+								.catch((err) => console.error(err));
+						}
+						if (!url.length) {
+							if (url.search("species")) {
+								character.species = "Unspecified";
+							}
+							if (url.search("vehicles")) {
+								character.vehicles = "";
+							}
+							if (url.search("starships")) {
+								character.starships = "";
+							}
+						}
+					})
+				).then(charactersWithAllData.push(character));
 			});
-			await setCharacters(characters);
-			await fetchedTimeout();
-		}
-
-		const fetchAllCharacters = (allCharacters, data) => {
-			if (data.next) {
-				fetch(data.next)
-					.then((response) => response.json())
-					.then((data) => {
-						allCharacters.push(...data.results);
-						fetchAllCharacters(allCharacters, data);
-					});
-			}
-			if (!data.next) {
-				fetchOtherData(allCharacters);
-			}
+			setCharacters(charactersWithAllData);
 		};
 
-		async function fetchApi() {
-			const allCharacters = [];
-			await fetch(api)
-				.then((response) => response.json())
-				.then((data) => {
-					allCharacters.push(...data.results);
-					fetchAllCharacters(allCharacters, data);
-				})
-				.catch((error) => console.log(error));
-		}
+		const fetchApi = () => {
+			const characters = [];
+			Promise.all(
+				[api].map((api) =>
+					fetch(api)
+						.then((response) => response.json())
+						.then((data) => characters.push(...data.results))
+						.then((data) => fetchOtherData(characters))
+						.then(setFetched(true))
+				)
+			);
+		};
 		fetchApi();
 	}, []);
 
@@ -98,7 +83,6 @@ function App() {
 					<div className={`${basicClassName}__inputsAndBtnsSection`}>
 						<FilteringSection
 							basicClassName={`${basicClassName}__inputsAndBtnsSection`}
-							characters={characters}
 						/>
 						<ButtonsSection
 							basicClassName={`${basicClassName}__inputsAndBtnsSection`}

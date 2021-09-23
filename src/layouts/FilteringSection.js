@@ -1,9 +1,10 @@
-const FilteringSection = ({ basicClassName, characters }) => {
-	console.log(characters);
+const FilteringSection = ({
+	basicClassName,
+	speciesOptions,
+	homeworldOptions,
+}) => {
 	const filteringSectionClass = `${basicClassName}__filteringSection`;
-	// const speciesOptions = characters.map((character) =>
-	// 	console.log(character.species)
-	// );
+
 	return (
 		<div className={filteringSectionClass}>
 			<input
@@ -17,6 +18,7 @@ const FilteringSection = ({ basicClassName, characters }) => {
 				className={`${filteringSectionClass}__species`}
 			>
 				<option value="Species">Species</option>
+				{speciesOptions};
 			</select>
 			<select
 				name="homeworld"
@@ -24,6 +26,7 @@ const FilteringSection = ({ basicClassName, characters }) => {
 				className={`${filteringSectionClass}__homeworld`}
 			>
 				<option value="Homeworld">Homeworld</option>
+				{homeworldOptions}
 			</select>
 			<select
 				name="status"
