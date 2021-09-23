@@ -77,11 +77,41 @@ function App() {
 	const handleSearchChange = (e) => {
 		const searchInputText = e.target.value;
 		setSearchInput(searchInputText);
-		const stateCharacters = characters;
-		const foundCharacters = stateCharacters.filter(
+		const filterSearchCharacters = characters.filter(
 			(character) => character.name.search(searchInputText) >= 0
 		);
-		setFilteredCharacters(foundCharacters);
+
+		setFilteredCharacters(filterSearchCharacters);
+		const filteredCharacters = [];
+
+		if (filteredSpecies.length) {
+			for (let species of filteredSpecies) {
+				const speciesCharFiltered = filterSearchCharacters.filter(
+					(character) => character.species === species
+				);
+				filteredCharacters.push(...speciesCharFiltered);
+			}
+			setFilteredCharacters(filteredCharacters);
+		}
+		if (filteredHomeworlds.length && filteredCharacters.length) {
+			for (let homeworld of filteredHomeworlds) {
+				const homeworldCharFiltered = filteredCharacters.filter(
+					(character) => character.homeworlds === homeworld
+				);
+				filteredCharacters.push(...homeworldCharFiltered);
+			}
+			setFilteredCharacters(filteredCharacters);
+		}
+		if (filteredHomeworlds.length && !filteredCharacters.lenght) {
+			for (let homeworld of filteredHomeworlds) {
+				const homeworldCharFiltered = filterSearchCharacters.filter(
+					(character) => character.homeworlds === homeworld
+				);
+				filteredCharacters.push(...homeworldCharFiltered);
+			}
+			console.log(filteredCharacters);
+			setFilteredCharacters(filteredCharacters);
+		}
 	};
 
 	const handleSpeciesFilterChange = (e) => {
@@ -98,11 +128,13 @@ function App() {
 			setFilteredCharacters(filteredSpecies);
 		}
 		if (!e.length) {
+			setFilteredSpecies([]);
 			setFilteredCharacters(characters);
 		}
 	};
 
 	const handleHomeworldsFilterChange = (e) => {
+		console.log(e);
 		if (e.length) {
 			const homeworldsFilter = e.map((value) => value.value);
 			setFilteredHomeworlds(homeworldsFilter);
@@ -118,6 +150,7 @@ function App() {
 			setFilteredCharacters(filteredHomeworlds);
 		}
 		if (!e.length) {
+			setFilteredHomeworlds([]);
 			setFilteredCharacters(characters);
 		}
 	};
@@ -131,6 +164,7 @@ function App() {
 						<FilteringSection
 							basicClassName={`${basicClassName}__inputsAndBtnsSection`}
 							filteredCharacters={filteredCharacters}
+							searchInput={searchInput}
 							handleSearchChange={handleSearchChange}
 							handleSpeciesFilterChange={
 								handleSpeciesFilterChange

@@ -3,6 +3,7 @@ import Select from "react-select";
 const FilteringSection = ({
 	basicClassName,
 	filteredCharacters,
+	searchInput,
 	handleSearchChange,
 	handleSpeciesFilterChange,
 	handleHomeworldsFilterChange,
@@ -11,23 +12,18 @@ const FilteringSection = ({
 	const speciesOptions = [];
 	const homeworldOptions = [];
 
-	const filterTheSpecies = () => {
-		const options = filteredCharacters.map((character) => character.species);
+	const filterOptions = (type, optionsType) => {
+		const options = filteredCharacters.map((character) =>
+			type === "homeworld" ? character.homeworld : character.species
+		);
 		const filteredOptions = [...new Set(options)];
 		filteredOptions.map((option) =>
-			speciesOptions.push({ value: option, label: option })
+			optionsType.push({ value: option, label: option, type: type })
 		);
 	};
 
-	const filterTheHomeworld = () => {
-		const options = filteredCharacters.map((character) => character.homeworld);
-		const filteredOptions = [...new Set(options)];
-		filteredOptions.map((option) =>
-			homeworldOptions.push({ value: option, label: option })
-		);
-	};
-	filterTheHomeworld();
-	filterTheSpecies();
+	filterOptions("homeworld", homeworldOptions);
+	filterOptions("species", speciesOptions);
 
 	return (
 		<div className={filteringSectionClass}>
@@ -35,6 +31,7 @@ const FilteringSection = ({
 				type="text"
 				className={`${filteringSectionClass}__searchInput`}
 				placeholder="Search"
+				value={searchInput}
 				onChange={handleSearchChange}
 			></input>
 			<Select
