@@ -1,9 +1,28 @@
-const FilteringSection = ({
-	basicClassName,
-	speciesOptions,
-	homeworldOptions,
-}) => {
+const FilteringSection = ({ basicClassName, characters }) => {
 	const filteringSectionClass = `${basicClassName}__filteringSection`;
+	// const filterTheSpecies = () => {
+	// 	const species = characters.map((character) => character.species);
+	// 	const filteredSpecies = [...new Set(species)];
+	// 	return filteredSpecies;
+	// };
+	// const filteringSpecies = filterTheSpecies();
+	// const speciesOptions = filteringSpecies.map((option) => (
+	// 	<option key={option} value={option}>
+	// 		{option}
+	// 	</option>
+	// ));
+
+	const filterTheOptions = () => {
+		const options = characters.map((character) => character.homeworld);
+		const filteredOptions = [...new Set(options)];
+		return filteredOptions;
+	};
+	const filteringHomeworld = filterTheOptions();
+	const homeworldOptions = filteringHomeworld.map((option) => (
+		<option key={option} value={option}>
+			{option}
+		</option>
+	));
 
 	return (
 		<div className={filteringSectionClass}>
@@ -18,7 +37,7 @@ const FilteringSection = ({
 				className={`${filteringSectionClass}__species`}
 			>
 				<option value="Species">Species</option>
-				{speciesOptions};
+				{/* {speciesOptions}; */}
 			</select>
 			<select
 				name="homeworld"
@@ -26,7 +45,7 @@ const FilteringSection = ({
 				className={`${filteringSectionClass}__homeworld`}
 			>
 				<option value="Homeworld">Homeworld</option>
-				{homeworldOptions}
+				{/* {homeworldOptions} */}
 			</select>
 			<select
 				name="status"

@@ -8,18 +8,18 @@ function App() {
 	const basicClassName = "starWarsApi";
 	const api = `https://swapi.dev/api/people/`;
 	const [characters, setCharacters] = useState([]);
-	const [fetched, setFetched] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
+		const charactersWithAllData = [];
+
 		const fetchOtherData = (characters) => {
-			const charactersWithAllData = [];
 			characters.forEach((character) => {
 				const homeworld = character.homeworld;
 				const species = character.species;
 				const vehicles = character.vehicles;
 				const starships = character.starships;
 				let urls = [homeworld, ...species, ...vehicles, ...starships];
-
 				Promise.all(
 					urls.map((url) => {
 						if (url.length) {
@@ -57,7 +57,7 @@ function App() {
 					})
 				).then(charactersWithAllData.push(character));
 			});
-			setCharacters(charactersWithAllData);
+			return charactersWithAllData;
 		};
 
 		const fetchApi = () => {
@@ -67,8 +67,11 @@ function App() {
 					fetch(api)
 						.then((response) => response.json())
 						.then((data) => characters.push(...data.results))
-						.then((data) => fetchOtherData(characters))
-						.then(setFetched(true))
+						.then((data) => {
+							setCharacters(fetchOtherData(characters));
+							// fetchOtherData(characters);
+							setLoading(false);
+						})
 				)
 			);
 		};
@@ -77,12 +80,13 @@ function App() {
 
 	return (
 		<div className={basicClassName}>
-			{fetched ? (
+			{!loading ? (
 				<>
 					<h1 className={`${basicClassName}__heading`}>Characters</h1>
 					<div className={`${basicClassName}__inputsAndBtnsSection`}>
 						<FilteringSection
 							basicClassName={`${basicClassName}__inputsAndBtnsSection`}
+							characters={characters}
 						/>
 						<ButtonsSection
 							basicClassName={`${basicClassName}__inputsAndBtnsSection`}
