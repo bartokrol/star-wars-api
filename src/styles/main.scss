@@ -16,6 +16,12 @@
 		&__filteringSection {
 			width: 40vw;
 			@include flexBetween;
+			&__species {
+				width: 100%;
+			}
+			&__homeworld {
+				width: 100%;
+			}
 		}
 		&__buttonsSection {
 			width: 20vw;

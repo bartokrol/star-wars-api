@@ -32,6 +32,14 @@
           justify-content: space-between;
 }
 
+.starWarsApi__inputsAndBtnsSection__filteringSection__species {
+  width: 100%;
+}
+
+.starWarsApi__inputsAndBtnsSection__filteringSection__homeworld {
+  width: 100%;
+}
+
 .starWarsApi__inputsAndBtnsSection__buttonsSection {
   width: 20vw;
   display: -webkit-box;
