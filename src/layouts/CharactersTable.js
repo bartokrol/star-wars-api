@@ -1,9 +1,9 @@
 import { useTable } from "react-table";
 import React from "react";
 
-function CharactersTable({ characters }) {
+function CharactersTable({ filteredCharacters }) {
 	// console.log(characters);
-	const dataCharacters = characters.map((character) => ({
+	const dataCharacters = filteredCharacters.map((character) => ({
 		checkboxCol: <input type="checkbox"></input>,
 		nameCol: (
 			<span>

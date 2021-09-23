@@ -8,7 +8,9 @@ function App() {
 	const basicClassName = "starWarsApi";
 	const api = `https://swapi.dev/api/people/`;
 	const [characters, setCharacters] = useState([]);
+	const [filteredCharacters, setFilteredCharacters] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [searchInput, setSearchInput] = useState("");
 
 	useEffect(() => {
 		const charactersWithAllData = [];
@@ -40,24 +42,17 @@ function App() {
 										character.starships.shift();
 										character.starships.push(data.name);
 									}
+									if (!character.species.length) {
+										character.species = "Unspecified";
+									}
 								})
 								.catch((err) => console.error(err));
-						}
-						if (!url.length) {
-							if (url.search("species")) {
-								character.species = "Unspecified";
-							}
-							if (url.search("vehicles")) {
-								character.vehicles = "";
-							}
-							if (url.search("starships")) {
-								character.starships = "";
-							}
 						}
 					})
 				).then(charactersWithAllData.push(character));
 			});
-			return charactersWithAllData;
+			setCharacters(charactersWithAllData);
+			setFilteredCharacters(charactersWithAllData);
 		};
 
 		const fetchApi = () => {
@@ -68,8 +63,7 @@ function App() {
 						.then((response) => response.json())
 						.then((data) => characters.push(...data.results))
 						.then((data) => {
-							setCharacters(fetchOtherData(characters));
-							// fetchOtherData(characters);
+							fetchOtherData(characters);
 							setLoading(false);
 						})
 				)
@@ -77,6 +71,16 @@ function App() {
 		};
 		fetchApi();
 	}, []);
+
+	const handleSearchChange = (e) => {
+		const searchInputText = e.target.value;
+		setSearchInput(searchInputText);
+		const stateCharacters = characters;
+		const foundCharacters = stateCharacters.filter(
+			(character) => character.name.search(searchInputText) >= 0
+		);
+		setFilteredCharacters(foundCharacters);
+	};
 
 	return (
 		<div className={basicClassName}>
@@ -87,12 +91,13 @@ function App() {
 						<FilteringSection
 							basicClassName={`${basicClassName}__inputsAndBtnsSection`}
 							characters={characters}
+							handleSearchChange={handleSearchChange}
 						/>
 						<ButtonsSection
 							basicClassName={`${basicClassName}__inputsAndBtnsSection`}
 						/>
 					</div>
-					<CharactersTable characters={characters} />
+					<CharactersTable filteredCharacters={filteredCharacters} />
 				</>
 			) : null}
 		</div>

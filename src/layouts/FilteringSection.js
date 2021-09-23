@@ -1,16 +1,20 @@
-const FilteringSection = ({ basicClassName, characters }) => {
+const FilteringSection = ({
+	basicClassName,
+	characters,
+	handleSearchChange,
+}) => {
 	const filteringSectionClass = `${basicClassName}__filteringSection`;
-	// const filterTheSpecies = () => {
-	// 	const species = characters.map((character) => character.species);
-	// 	const filteredSpecies = [...new Set(species)];
-	// 	return filteredSpecies;
-	// };
-	// const filteringSpecies = filterTheSpecies();
-	// const speciesOptions = filteringSpecies.map((option) => (
-	// 	<option key={option} value={option}>
-	// 		{option}
-	// 	</option>
-	// ));
+	const filterTheSpecies = () => {
+		const species = characters.map((character) => character.species);
+		const filteredSpecies = [...new Set(species)];
+		return filteredSpecies;
+	};
+	const filteringSpecies = filterTheSpecies();
+	const speciesOptions = filteringSpecies.map((option) => (
+		<option key={option} value={option}>
+			{option}
+		</option>
+	));
 
 	const filterTheOptions = () => {
 		const options = characters.map((character) => character.homeworld);
@@ -30,6 +34,7 @@ const FilteringSection = ({ basicClassName, characters }) => {
 				type="text"
 				className={`${filteringSectionClass}__searchInput`}
 				placeholder="Search"
+				onChange={handleSearchChange}
 			></input>
 			<select
 				name="species"
@@ -37,7 +42,7 @@ const FilteringSection = ({ basicClassName, characters }) => {
 				className={`${filteringSectionClass}__species`}
 			>
 				<option value="Species">Species</option>
-				{/* {speciesOptions}; */}
+				{speciesOptions};
 			</select>
 			<select
 				name="homeworld"
@@ -45,7 +50,7 @@ const FilteringSection = ({ basicClassName, characters }) => {
 				className={`${filteringSectionClass}__homeworld`}
 			>
 				<option value="Homeworld">Homeworld</option>
-				{/* {homeworldOptions} */}
+				{homeworldOptions}
 			</select>
 			<select
 				name="status"
