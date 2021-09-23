@@ -85,13 +85,41 @@ function App() {
 	};
 
 	const handleSpeciesFilterChange = (e) => {
-		const speciesFilter = e.map((value) => value.value);
-		setFilteredSpecies(speciesFilter);
+		if (e.length) {
+			const speciesFilter = e.map((value) => value.value);
+			setFilteredSpecies(speciesFilter);
+			const filteredSpecies = filteredCharacters.filter((character) => {
+				for (let species of speciesFilter) {
+					if (character.species === species) {
+						return { character };
+					}
+				}
+			});
+			setFilteredCharacters(filteredSpecies);
+		}
+		if (!e.length) {
+			setFilteredCharacters(characters);
+		}
 	};
 
-	const handleHomeworldFilterChange = (e) => {
-		const homeworldFilter = e.map((value) => value.value);
-		setFilteredHomeworlds(homeworldFilter);
+	const handleHomeworldsFilterChange = (e) => {
+		if (e.length) {
+			const homeworldsFilter = e.map((value) => value.value);
+			setFilteredHomeworlds(homeworldsFilter);
+			const filteredHomeworlds = filteredCharacters.filter(
+				(character) => {
+					for (let homeworld of homeworldsFilter) {
+						if (character.homeworld === homeworld) {
+							return { character };
+						}
+					}
+				}
+			);
+			setFilteredCharacters(filteredHomeworlds);
+		}
+		if (!e.length) {
+			setFilteredCharacters(characters);
+		}
 	};
 
 	return (
@@ -102,14 +130,16 @@ function App() {
 					<div className={`${basicClassName}__inputsAndBtnsSection`}>
 						<FilteringSection
 							basicClassName={`${basicClassName}__inputsAndBtnsSection`}
-							characters={characters}
+							filteredCharacters={filteredCharacters}
 							handleSearchChange={handleSearchChange}
 							handleSpeciesFilterChange={
 								handleSpeciesFilterChange
 							}
-							handleHomeworldFilterChange={
-								handleHomeworldFilterChange
+							handleHomeworldsFilterChange={
+								handleHomeworldsFilterChange
 							}
+							filteredSpecies={filteredSpecies}
+							filteredHomeworlds={filteredHomeworlds}
 						/>
 						<ButtonsSection
 							basicClassName={`${basicClassName}__inputsAndBtnsSection`}

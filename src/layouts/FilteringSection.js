@@ -2,17 +2,17 @@ import Select from "react-select";
 
 const FilteringSection = ({
 	basicClassName,
-	characters,
+	filteredCharacters,
 	handleSearchChange,
 	handleSpeciesFilterChange,
-	handleHomeworldFilterChange,
+	handleHomeworldsFilterChange,
 }) => {
 	const filteringSectionClass = `${basicClassName}__filteringSection`;
 	const speciesOptions = [];
 	const homeworldOptions = [];
 
 	const filterTheSpecies = () => {
-		const options = characters.map((character) => character.species);
+		const options = filteredCharacters.map((character) => character.species);
 		const filteredOptions = [...new Set(options)];
 		filteredOptions.map((option) =>
 			speciesOptions.push({ value: option, label: option })
@@ -20,7 +20,7 @@ const FilteringSection = ({
 	};
 
 	const filterTheHomeworld = () => {
-		const options = characters.map((character) => character.homeworld);
+		const options = filteredCharacters.map((character) => character.homeworld);
 		const filteredOptions = [...new Set(options)];
 		filteredOptions.map((option) =>
 			homeworldOptions.push({ value: option, label: option })
@@ -28,8 +28,6 @@ const FilteringSection = ({
 	};
 	filterTheHomeworld();
 	filterTheSpecies();
-	console.log(speciesOptions);
-	console.log(homeworldOptions);
 
 	return (
 		<div className={filteringSectionClass}>
@@ -51,7 +49,7 @@ const FilteringSection = ({
 				placeholder="Homeworld"
 				className={`${filteringSectionClass}__homeworld`}
 				options={homeworldOptions}
-				onChange={handleHomeworldFilterChange}
+				onChange={handleHomeworldsFilterChange}
 			/>
 			<select
 				name="status"
