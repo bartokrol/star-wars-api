@@ -4,6 +4,8 @@ const FilteringSection = ({
 	basicClassName,
 	characters,
 	handleSearchChange,
+	handleSpeciesFilterChange,
+	handleHomeworldFilterChange,
 }) => {
 	const filteringSectionClass = `${basicClassName}__filteringSection`;
 	const speciesOptions = [];
@@ -42,12 +44,14 @@ const FilteringSection = ({
 				placeholder="Species"
 				className={`${filteringSectionClass}__species`}
 				options={speciesOptions}
+				onChange={handleSpeciesFilterChange}
 			/>
 			<Select
 				isMulti
 				placeholder="Homeworld"
 				className={`${filteringSectionClass}__homeworld`}
 				options={homeworldOptions}
+				onChange={handleHomeworldFilterChange}
 			/>
 			<select
 				name="status"

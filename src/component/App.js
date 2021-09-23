@@ -9,6 +9,8 @@ function App() {
 	const api = `https://swapi.dev/api/people/`;
 	const [characters, setCharacters] = useState([]);
 	const [filteredCharacters, setFilteredCharacters] = useState([]);
+	const [filteredSpecies, setFilteredSpecies] = useState([]);
+	const [filteredHomeworlds, setFilteredHomeworlds] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [searchInput, setSearchInput] = useState("");
 
@@ -82,6 +84,16 @@ function App() {
 		setFilteredCharacters(foundCharacters);
 	};
 
+	const handleSpeciesFilterChange = (e) => {
+		const speciesFilter = e.map((value) => value.value);
+		setFilteredSpecies(speciesFilter);
+	};
+
+	const handleHomeworldFilterChange = (e) => {
+		const homeworldFilter = e.map((value) => value.value);
+		setFilteredHomeworlds(homeworldFilter);
+	};
+
 	return (
 		<div className={basicClassName}>
 			{!loading ? (
@@ -92,6 +104,12 @@ function App() {
 							basicClassName={`${basicClassName}__inputsAndBtnsSection`}
 							characters={characters}
 							handleSearchChange={handleSearchChange}
+							handleSpeciesFilterChange={
+								handleSpeciesFilterChange
+							}
+							handleHomeworldFilterChange={
+								handleHomeworldFilterChange
+							}
 						/>
 						<ButtonsSection
 							basicClassName={`${basicClassName}__inputsAndBtnsSection`}
