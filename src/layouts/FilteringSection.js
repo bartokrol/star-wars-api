@@ -1,32 +1,33 @@
+import Select from "react-select";
+
 const FilteringSection = ({
 	basicClassName,
 	characters,
 	handleSearchChange,
 }) => {
 	const filteringSectionClass = `${basicClassName}__filteringSection`;
-	const filterTheSpecies = () => {
-		const species = characters.map((character) => character.species);
-		const filteredSpecies = [...new Set(species)];
-		return filteredSpecies;
-	};
-	const filteringSpecies = filterTheSpecies();
-	const speciesOptions = filteringSpecies.map((option) => (
-		<option key={option} value={option}>
-			{option}
-		</option>
-	));
+	const speciesOptions = [];
+	const homeworldOptions = [];
 
-	const filterTheOptions = () => {
+	const filterTheSpecies = () => {
+		const options = characters.map((character) => character.species);
+		const filteredOptions = [...new Set(options)];
+		filteredOptions.map((option) =>
+			speciesOptions.push({ value: option, label: option })
+		);
+	};
+
+	const filterTheHomeworld = () => {
 		const options = characters.map((character) => character.homeworld);
 		const filteredOptions = [...new Set(options)];
-		return filteredOptions;
+		filteredOptions.map((option) =>
+			homeworldOptions.push({ value: option, label: option })
+		);
 	};
-	const filteringHomeworld = filterTheOptions();
-	const homeworldOptions = filteringHomeworld.map((option) => (
-		<option key={option} value={option}>
-			{option}
-		</option>
-	));
+	filterTheHomeworld();
+	filterTheSpecies();
+	console.log(speciesOptions);
+	console.log(homeworldOptions);
 
 	return (
 		<div className={filteringSectionClass}>
@@ -36,22 +37,18 @@ const FilteringSection = ({
 				placeholder="Search"
 				onChange={handleSearchChange}
 			></input>
-			<select
-				name="species"
-				id="species"
+			<Select
+				isMulti
+				placeholder="Species"
 				className={`${filteringSectionClass}__species`}
-			>
-				<option value="Species">Species</option>
-				{speciesOptions};
-			</select>
-			<select
-				name="homeworld"
-				id="homeworld"
+				options={speciesOptions}
+			/>
+			<Select
+				isMulti
+				placeholder="Homeworld"
 				className={`${filteringSectionClass}__homeworld`}
-			>
-				<option value="Homeworld">Homeworld</option>
-				{homeworldOptions}
-			</select>
+				options={homeworldOptions}
+			/>
 			<select
 				name="status"
 				id="status"
