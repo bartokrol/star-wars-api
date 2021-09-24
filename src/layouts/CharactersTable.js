@@ -2,9 +2,8 @@ import { useTable } from "react-table";
 import React from "react";
 
 function CharactersTable({ filteredCharacters }) {
-	// console.log(characters);
 	const dataCharacters = filteredCharacters.map((character) => ({
-		checkboxCol: <input type="checkbox"></input>,
+		selectedCol: <input type="checkbox" checked={character.selecter} />,
 		nameCol: (
 			<span>
 				{character.name}
@@ -13,21 +12,16 @@ function CharactersTable({ filteredCharacters }) {
 		),
 		bornCol: character.birth_year,
 		homeworldCol: character.homeworld,
-		vehiclesAndStarshipsCol: [
-			...character.vehicles,
-			...character.starships,
-		],
-		statusCol: "",
+		vehiclesAndStarshipsCol: character.vehiclesAndStarships,
+		statusCol: character.active,
 		actionsCol: "",
 	}));
-
 	const data = React.useMemo(() => dataCharacters, [dataCharacters]);
-
 	const columns = React.useMemo(
 		() => [
 			{
 				Header: <input type="checkbox"></input>,
-				accessor: "checkboxCol",
+				accessor: "selectedCol",
 			},
 			{
 				Header: (
@@ -78,13 +72,10 @@ function CharactersTable({ filteredCharacters }) {
 				accessor: "actionsCol",
 			},
 		],
-
 		[]
 	);
-
 	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
 		useTable({ columns, data });
-
 	return (
 		<table {...getTableProps()}>
 			<thead>

@@ -24,7 +24,7 @@ function App() {
 				const vehicles = character.vehicles;
 				const starships = character.starships;
 				let urls = [homeworld, ...species, ...vehicles, ...starships];
-				Promise.all(
+				Promise.allSettled(
 					urls.map((url) => {
 						if (url.length) {
 							fetch(url)
@@ -51,10 +51,30 @@ function App() {
 								.catch((err) => console.error(err));
 						}
 					})
-				).then(charactersWithAllData.push(character));
+				).then(
+					charactersWithAllData.push({
+						selected: false,
+						name: character.name,
+						species: character.species,
+						born: character.birth_year,
+						homeworld: character.homeworld,
+						vehiclesAndStarships: [
+							...character.vehicles,
+							...character.starships,
+						],
+						active: true,
+						action: {
+							edit: false,
+							deactivate: false,
+							remove: false,
+						},
+					})
+				);
 			});
+
 			setCharacters(charactersWithAllData);
 			setFilteredCharacters(charactersWithAllData);
+			setLoading(false);
 		};
 
 		const fetchApi = () => {
@@ -66,7 +86,6 @@ function App() {
 						.then((data) => characters.push(...data.results))
 						.then((data) => {
 							fetchOtherData(characters);
-							setLoading(false);
 						})
 				)
 			);
@@ -93,7 +112,7 @@ function App() {
 			}
 			setFilteredCharacters(filteredCharacters);
 		}
-		if (filteredHomeworlds.length && filteredCharacters.length) {
+		if (filteredHomeworlds.length) {
 			for (let homeworld of filteredHomeworlds) {
 				const homeworldCharFiltered = filteredCharacters.filter(
 					(character) => character.homeworlds === homeworld
@@ -102,16 +121,16 @@ function App() {
 			}
 			setFilteredCharacters(filteredCharacters);
 		}
-		if (filteredHomeworlds.length && !filteredCharacters.lenght) {
-			for (let homeworld of filteredHomeworlds) {
-				const homeworldCharFiltered = filterSearchCharacters.filter(
-					(character) => character.homeworlds === homeworld
-				);
-				filteredCharacters.push(...homeworldCharFiltered);
-			}
-			console.log(filteredCharacters);
-			setFilteredCharacters(filteredCharacters);
-		}
+		// if (filteredHomeworlds.length && filteredCharacters.lenght) {
+		// 	for (let homeworld of filteredHomeworlds) {
+		// 		const homeworldCharFiltered = filterSearchCharacters.filter(
+		// 			(character) => character.homeworlds === homeworld
+		// 		);
+		// 		filteredCharacters.push(...homeworldCharFiltered);
+		// 	}
+		// 	console.log(filteredCharacters);
+		// 	setFilteredCharacters(filteredCharacters);
+		// }
 	};
 
 	const handleSpeciesFilterChange = (e) => {
@@ -134,7 +153,6 @@ function App() {
 	};
 
 	const handleHomeworldsFilterChange = (e) => {
-		console.log(e);
 		if (e.length) {
 			const homeworldsFilter = e.map((value) => value.value);
 			setFilteredHomeworlds(homeworldsFilter);
