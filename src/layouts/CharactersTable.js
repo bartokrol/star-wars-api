@@ -1,16 +1,23 @@
 import { useTable } from "react-table";
 import React from "react";
 
-function CharactersTable({ filteredCharacters }) {
+function CharactersTable({ filteredCharacters, handleSelectChange }) {
 	const dataCharacters = filteredCharacters.map((character) => ({
-		selectedCol: <input type="checkbox" checked={character.selecter} />,
+		selectedCol: (
+			<input
+				id={character.id}
+				checked={character.selected}
+				type="checkbox"
+				onChange={handleSelectChange}
+			/>
+		),
 		nameCol: (
 			<span>
 				{character.name}
 				<span>{character.species}</span>
 			</span>
 		),
-		bornCol: character.birth_year,
+		bornCol: character.born,
 		homeworldCol: character.homeworld,
 		vehiclesAndStarshipsCol: character.vehiclesAndStarships,
 		statusCol: character.active,

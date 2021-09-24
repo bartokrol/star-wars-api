@@ -18,7 +18,9 @@ function App() {
 		const charactersWithAllData = [];
 
 		const fetchOtherData = (characters) => {
+			let id = 0;
 			characters.forEach((character) => {
+				id++;
 				const homeworld = character.homeworld;
 				const species = character.species;
 				const vehicles = character.vehicles;
@@ -53,6 +55,7 @@ function App() {
 					})
 				).then(
 					charactersWithAllData.push({
+						id: id,
 						selected: false,
 						name: character.name,
 						species: character.species,
@@ -173,6 +176,20 @@ function App() {
 		}
 	};
 
+	const handleSelectChange = (e) => {
+		const id = e.target.id - 1;
+		const characters = filteredCharacters;
+
+		setFilteredCharacters((characters) => {
+			characters = [...characters];
+			characters[id] = {
+				...characters[id],
+				selected: !characters[id].selected,
+			};
+			return characters;
+		});
+	};
+
 	return (
 		<div className={basicClassName}>
 			{!loading ? (
@@ -197,7 +214,10 @@ function App() {
 							basicClassName={`${basicClassName}__inputsAndBtnsSection`}
 						/>
 					</div>
-					<CharactersTable filteredCharacters={filteredCharacters} />
+					<CharactersTable
+						filteredCharacters={filteredCharacters}
+						handleSelectChange={handleSelectChange}
+					/>
 				</>
 			) : null}
 		</div>
